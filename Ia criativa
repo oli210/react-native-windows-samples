@@ -1,0 +1,241 @@
+// App com geração de ebooks e jogos + menu lateral + integração com IA (mock) import React, { useState } from "react";
+
+export default function App() { const [screen, setScreen] = useState("dashboard");
+
+return ( <div className="flex min-h-screen font-sans"> {/* Sidebar */} <aside className="w-64 bg-indigo-700 text-white p-6 space-y-4"> <h1 className="text-2xl font-bold mb-8">Criativa IA</h1> <NavButton label="Dashboard" onClick={() => setScreen("dashboard")} /> <NavButton label="Criar Ebook" onClick={() => setScreen("ebook")} /> <NavButton label="Criar Jogo" onClick={() => setScreen("jogo")} /> <NavButton label="Produtos" onClick={() => setScreen("produtos")} /> <NavButton label="Marketing" onClick={() => setScreen("marketing")} /> <NavButton label="Projetos" onClick={() => setScreen("projetos")} /> </aside>
+
+{/* Conteúdo */}
+  <main className="flex-1 bg-gray-100 p-8">
+    {screen === "dashboard" && <Dashboard setScreen={setScreen} />}
+    {screen === "ebook" && <EbookGenerator />}
+    {screen === "jogo" && <GameGenerator />}
+    {screen === "produtos" && <Placeholder title="Produtos" />}
+    {screen === "marketing" && <Placeholder title="Marketing" />}
+    {screen === "projetos" && <Placeholder title="Projetos" />}
+  </main>
+</div>
+
+); }
+
+function NavButton({ label, onClick }) { return ( <button onClick={onClick} className="block w-full text-left text-white hover:bg-indigo-600 px-4 py-2 rounded"> {label} </button> ); }
+
+function Dashboard({ setScreen }) { return ( <div> <h2 className="text-3xl font-bold mb-6 text-indigo-700">Dashboard</h2> <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> <Card title="Criar Ebook" description="Gere ebooks completos com tema, sumário e conteúdo." onClick={() => setScreen("ebook")} /> <Card title="Criar Produto Físico" description="Gere ideias para camisetas, planners, canecas e mais." onClick={() => setScreen("produtos")} /> <Card title="Criar Jogo" description="Gere histórias, personagens e código base para games." onClick={() => setScreen("jogo")} /> <Card title="Criar Post para Instagram" description="Gere posts, legendas e carrosséis para redes sociais." onClick={() => setScreen("marketing")} /> <Card title="Criar Página de Vendas" description="Gere páginas de venda com textos persuasivos." onClick={() => setScreen("marketing")} /> <Card title="Ver Projetos" description="Acompanhe tudo que sua IA já criou." onClick={() => setScreen("projetos")} /> </div> </div> ); }
+
+function Card({ title, description, onClick }) { return ( <div onClick={onClick} className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer"> <h3 className="text-xl font-semibold mb-2 text-indigo-700">{title}</h3> <p className="text-gray-600">{description}</p> </div> ); }
+
+function EbookGenerator() { const [theme, setTheme] = useState(""); const [style, setStyle] = useState(""); const [generated, setGenerated] = useState(null);
+
+const generateEbook = () => { const title = Guia Completo: ${theme} (${style}); const summary = [ "Introdução", "Capítulo 1: Fundamentos", "Capítulo 2: Estratégias Avançadas", "Capítulo 3: Estudos de Caso", "Conclusão" ]; const content = summary.map((ch) => ### ${ch}\n\nConteúdo do ${ch.toLowerCase()}...\n).join("\n"); setGenerated({ title, summary, content }); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Ebook</h2> <input type="text" placeholder="Tema do ebook" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Estilo (ex: guia, técnico, história)" value={style} onChange={(e) => setStyle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateEbook} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Ebook </button>
+
+{generated && (
+    <div className="mt-6">
+      <h3 className="text-xl font-semibold text-indigo-700 mb-2">{generated.title}</h3>
+      <p className="mb-2">Sumário:</p>
+      <ul className="list-disc list-inside mb-4">
+        {generated.summary.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+      <div className="whitespace-pre-wrap text-gray-700">{generated.content}</div>
+    </div>
+  )}
+</div>
+
+); }
+
+function GameGenerator() { const [title, setTitle] = useState(""); const [genre, setGenre] = useState(""); const [mechanics, setMechanics] = useState(""); const [result, setResult] = useState(null);
+
+const generateGame = () => { const idea = Jogo: ${title}\nGênero: ${genre}\nMecânicas: ${mechanics}\n\nResumo: Em '${title}', você explora um universo onde ${mechanics.toLowerCase()}. É um jogo de ${genre.toLowerCase()} com elementos envolventes e desafios únicos.; setResult(idea); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Jogo</h2> <input type="text" placeholder="Título do jogo" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Gênero (aventura, RPG, estratégia...)" value={genre} onChange={(e) => setGenre(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Mecânicas (ex: combates por turno, crafting, exploração...)" value={mechanics} onChange={(e) => setMechanics(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateGame} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Jogo </button>
+
+{result && (
+    <div className="mt-6 whitespace-pre-wrap text-gray-700">
+      {result}
+    </div>
+  )}
+</div>
+
+); }
+
+function Placeholder({ title }) { return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold text-indigo-700">{title}</h2> <p className="text-gray-600 mt-2">Funcionalidade em construção...</p> </div> ); }// App com geração de ebooks e jogos + menu lateral + integração com IA (mock) import React, { useState } from "react";
+
+export default function App() { const [screen, setScreen] = useState("dashboard");
+
+return ( <div className="flex min-h-screen font-sans"> {/* Sidebar */} <aside className="w-64 bg-indigo-700 text-white p-6 space-y-4"> <h1 className="text-2xl font-bold mb-8">Criativa IA</h1> <NavButton label="Dashboard" onClick={() => setScreen("dashboard")} /> <NavButton label="Criar Ebook" onClick={() => setScreen("ebook")} /> <NavButton label="Criar Jogo" onClick={() => setScreen("jogo")} /> <NavButton label="Produtos" onClick={() => setScreen("produtos")} /> <NavButton label="Marketing" onClick={() => setScreen("marketing")} /> <NavButton label="Projetos" onClick={() => setScreen("projetos")} /> </aside>
+
+{/* Conteúdo */}
+  <main className="flex-1 bg-gray-100 p-8">
+    {screen === "dashboard" && <Dashboard setScreen={setScreen} />}
+    {screen === "ebook" && <EbookGenerator />}
+    {screen === "jogo" && <GameGenerator />}
+    {screen === "produtos" && <Placeholder title="Produtos" />}
+    {screen === "marketing" && <Placeholder title="Marketing" />}
+    {screen === "projetos" && <Placeholder title="Projetos" />}
+  </main>
+</div>
+
+); }
+
+function NavButton({ label, onClick }) { return ( <button onClick={onClick} className="block w-full text-left text-white hover:bg-indigo-600 px-4 py-2 rounded"> {label} </button> ); }
+
+function Dashboard({ setScreen }) { return ( <div> <h2 className="text-3xl font-bold mb-6 text-indigo-700">Dashboard</h2> <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> <Card title="Criar Ebook" description="Gere ebooks completos com tema, sumário e conteúdo." onClick={() => setScreen("ebook")} /> <Card title="Criar Produto Físico" description="Gere ideias para camisetas, planners, canecas e mais." onClick={() => setScreen("produtos")} /> <Card title="Criar Jogo" description="Gere histórias, personagens e código base para games." onClick={() => setScreen("jogo")} /> <Card title="Criar Post para Instagram" description="Gere posts, legendas e carrosséis para redes sociais." onClick={() => setScreen("marketing")} /> <Card title="Criar Página de Vendas" description="Gere páginas de venda com textos persuasivos." onClick={() => setScreen("marketing")} /> <Card title="Ver Projetos" description="Acompanhe tudo que sua IA já criou." onClick={() => setScreen("projetos")} /> </div> </div> ); }
+
+function Card({ title, description, onClick }) { return ( <div onClick={onClick} className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer"> <h3 className="text-xl font-semibold mb-2 text-indigo-700">{title}</h3> <p className="text-gray-600">{description}</p> </div> ); }
+
+function EbookGenerator() { const [theme, setTheme] = useState(""); const [style, setStyle] = useState(""); const [generated, setGenerated] = useState(null);
+
+const generateEbook = () => { const title = Guia Completo: ${theme} (${style}); const summary = [ "Introdução", "Capítulo 1: Fundamentos", "Capítulo 2: Estratégias Avançadas", "Capítulo 3: Estudos de Caso", "Conclusão" ]; const content = summary.map((ch) => ### ${ch}\n\nConteúdo do ${ch.toLowerCase()}...\n).join("\n"); setGenerated({ title, summary, content }); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Ebook</h2> <input type="text" placeholder="Tema do ebook" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Estilo (ex: guia, técnico, história)" value={style} onChange={(e) => setStyle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateEbook} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Ebook </button>
+
+{generated && (
+    <div className="mt-6">
+      <h3 className="text-xl font-semibold text-indigo-700 mb-2">{generated.title}</h3>
+      <p className="mb-2">Sumário:</p>
+      <ul className="list-disc list-inside mb-4">
+        {generated.summary.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+      <div className="whitespace-pre-wrap text-gray-700">{generated.content}</div>
+    </div>
+  )}
+</div>
+
+); }
+
+function GameGenerator() { const [title, setTitle] = useState(""); const [genre, setGenre] = useState(""); const [mechanics, setMechanics] = useState(""); const [result, setResult] = useState(null);
+
+const generateGame = () => { const idea = Jogo: ${title}\nGênero: ${genre}\nMecânicas: ${mechanics}\n\nResumo: Em '${title}', você explora um universo onde ${mechanics.toLowerCase()}. É um jogo de ${genre.toLowerCase()} com elementos envolventes e desafios únicos.; setResult(idea); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Jogo</h2> <input type="text" placeholder="Título do jogo" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Gênero (aventura, RPG, estratégia...)" value={genre} onChange={(e) => setGenre(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Mecânicas (ex: combates por turno, crafting, exploração...)" value={mechanics} onChange={(e) => setMechanics(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateGame} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Jogo </button>
+
+{result && (
+    <div className="mt-6 whitespace-pre-wrap text-gray-700">
+      {result}
+    </div>
+  )}
+</div>
+
+); }
+
+function Placeholder({ title }) { return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold text-indigo-700">{title}</h2> <p className="text-gray-600 mt-2">Funcionalidade em construção...</p> </div> ); }// App com geração de ebooks e jogos + menu lateral + integração com IA (mock) import React, { useState } from "react";
+
+export default function App() { const [screen, setScreen] = useState("dashboard");
+
+return ( <div className="flex min-h-screen font-sans"> {/* Sidebar */} <aside className="w-64 bg-indigo-700 text-white p-6 space-y-4"> <h1 className="text-2xl font-bold mb-8">Criativa IA</h1> <NavButton label="Dashboard" onClick={() => setScreen("dashboard")} /> <NavButton label="Criar Ebook" onClick={() => setScreen("ebook")} /> <NavButton label="Criar Jogo" onClick={() => setScreen("jogo")} /> <NavButton label="Produtos" onClick={() => setScreen("produtos")} /> <NavButton label="Marketing" onClick={() => setScreen("marketing")} /> <NavButton label="Projetos" onClick={() => setScreen("projetos")} /> </aside>
+
+{/* Conteúdo */}
+  <main className="flex-1 bg-gray-100 p-8">
+    {screen === "dashboard" && <Dashboard setScreen={setScreen} />}
+    {screen === "ebook" && <EbookGenerator />}
+    {screen === "jogo" && <GameGenerator />}
+    {screen === "produtos" && <Placeholder title="Produtos" />}
+    {screen === "marketing" && <Placeholder title="Marketing" />}
+    {screen === "projetos" && <Placeholder title="Projetos" />}
+  </main>
+</div>
+
+); }
+
+function NavButton({ label, onClick }) { return ( <button onClick={onClick} className="block w-full text-left text-white hover:bg-indigo-600 px-4 py-2 rounded"> {label} </button> ); }
+
+function Dashboard({ setScreen }) { return ( <div> <h2 className="text-3xl font-bold mb-6 text-indigo-700">Dashboard</h2> <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> <Card title="Criar Ebook" description="Gere ebooks completos com tema, sumário e conteúdo." onClick={() => setScreen("ebook")} /> <Card title="Criar Produto Físico" description="Gere ideias para camisetas, planners, canecas e mais." onClick={() => setScreen("produtos")} /> <Card title="Criar Jogo" description="Gere histórias, personagens e código base para games." onClick={() => setScreen("jogo")} /> <Card title="Criar Post para Instagram" description="Gere posts, legendas e carrosséis para redes sociais." onClick={() => setScreen("marketing")} /> <Card title="Criar Página de Vendas" description="Gere páginas de venda com textos persuasivos." onClick={() => setScreen("marketing")} /> <Card title="Ver Projetos" description="Acompanhe tudo que sua IA já criou." onClick={() => setScreen("projetos")} /> </div> </div> ); }
+
+function Card({ title, description, onClick }) { return ( <div onClick={onClick} className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer"> <h3 className="text-xl font-semibold mb-2 text-indigo-700">{title}</h3> <p className="text-gray-600">{description}</p> </div> ); }
+
+function EbookGenerator() { const [theme, setTheme] = useState(""); const [style, setStyle] = useState(""); const [generated, setGenerated] = useState(null);
+
+const generateEbook = () => { const title = Guia Completo: ${theme} (${style}); const summary = [ "Introdução", "Capítulo 1: Fundamentos", "Capítulo 2: Estratégias Avançadas", "Capítulo 3: Estudos de Caso", "Conclusão" ]; const content = summary.map((ch) => ### ${ch}\n\nConteúdo do ${ch.toLowerCase()}...\n).join("\n"); setGenerated({ title, summary, content }); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Ebook</h2> <input type="text" placeholder="Tema do ebook" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Estilo (ex: guia, técnico, história)" value={style} onChange={(e) => setStyle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateEbook} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Ebook </button>
+
+{generated && (
+    <div className="mt-6">
+      <h3 className="text-xl font-semibold text-indigo-700 mb-2">{generated.title}</h3>
+      <p className="mb-2">Sumário:</p>
+      <ul className="list-disc list-inside mb-4">
+        {generated.summary.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+      <div className="whitespace-pre-wrap text-gray-700">{generated.content}</div>
+    </div>
+  )}
+</div>
+
+); }
+
+function GameGenerator() { const [title, setTitle] = useState(""); const [genre, setGenre] = useState(""); const [mechanics, setMechanics] = useState(""); const [result, setResult] = useState(null);
+
+const generateGame = () => { const idea = Jogo: ${title}\nGênero: ${genre}\nMecânicas: ${mechanics}\n\nResumo: Em '${title}', você explora um universo onde ${mechanics.toLowerCase()}. É um jogo de ${genre.toLowerCase()} com elementos envolventes e desafios únicos.; setResult(idea); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Jogo</h2> <input type="text" placeholder="Título do jogo" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Gênero (aventura, RPG, estratégia...)" value={genre} onChange={(e) => setGenre(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Mecânicas (ex: combates por turno, crafting, exploração...)" value={mechanics} onChange={(e) => setMechanics(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateGame} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Jogo </button>
+
+{result && (
+    <div className="mt-6 whitespace-pre-wrap text-gray-700">
+      {result}
+    </div>
+  )}
+</div>
+
+); }
+
+function Placeholder({ title }) { return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold text-indigo-700">{title}</h2> <p className="text-gray-600 mt-2">Funcionalidade em construção...</p> </div> ); }// App com geração de ebooks e jogos + menu lateral + integração com IA (mock) import React, { useState } from "react";
+
+export default function App() { const [screen, setScreen] = useState("dashboard");
+
+return ( <div className="flex min-h-screen font-sans"> {/* Sidebar */} <aside className="w-64 bg-indigo-700 text-white p-6 space-y-4"> <h1 className="text-2xl font-bold mb-8">Criativa IA</h1> <NavButton label="Dashboard" onClick={() => setScreen("dashboard")} /> <NavButton label="Criar Ebook" onClick={() => setScreen("ebook")} /> <NavButton label="Criar Jogo" onClick={() => setScreen("jogo")} /> <NavButton label="Produtos" onClick={() => setScreen("produtos")} /> <NavButton label="Marketing" onClick={() => setScreen("marketing")} /> <NavButton label="Projetos" onClick={() => setScreen("projetos")} /> </aside>
+
+{/* Conteúdo */}
+  <main className="flex-1 bg-gray-100 p-8">
+    {screen === "dashboard" && <Dashboard setScreen={setScreen} />}
+    {screen === "ebook" && <EbookGenerator />}
+    {screen === "jogo" && <GameGenerator />}
+    {screen === "produtos" && <Placeholder title="Produtos" />}
+    {screen === "marketing" && <Placeholder title="Marketing" />}
+    {screen === "projetos" && <Placeholder title="Projetos" />}
+  </main>
+</div>
+
+); }
+
+function NavButton({ label, onClick }) { return ( <button onClick={onClick} className="block w-full text-left text-white hover:bg-indigo-600 px-4 py-2 rounded"> {label} </button> ); }
+
+function Dashboard({ setScreen }) { return ( <div> <h2 className="text-3xl font-bold mb-6 text-indigo-700">Dashboard</h2> <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> <Card title="Criar Ebook" description="Gere ebooks completos com tema, sumário e conteúdo." onClick={() => setScreen("ebook")} /> <Card title="Criar Produto Físico" description="Gere ideias para camisetas, planners, canecas e mais." onClick={() => setScreen("produtos")} /> <Card title="Criar Jogo" description="Gere histórias, personagens e código base para games." onClick={() => setScreen("jogo")} /> <Card title="Criar Post para Instagram" description="Gere posts, legendas e carrosséis para redes sociais." onClick={() => setScreen("marketing")} /> <Card title="Criar Página de Vendas" description="Gere páginas de venda com textos persuasivos." onClick={() => setScreen("marketing")} /> <Card title="Ver Projetos" description="Acompanhe tudo que sua IA já criou." onClick={() => setScreen("projetos")} /> </div> </div> ); }
+
+function Card({ title, description, onClick }) { return ( <div onClick={onClick} className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer"> <h3 className="text-xl font-semibold mb-2 text-indigo-700">{title}</h3> <p className="text-gray-600">{description}</p> </div> ); }
+
+function EbookGenerator() { const [theme, setTheme] = useState(""); const [style, setStyle] = useState(""); const [generated, setGenerated] = useState(null);
+
+const generateEbook = () => { const title = Guia Completo: ${theme} (${style}); const summary = [ "Introdução", "Capítulo 1: Fundamentos", "Capítulo 2: Estratégias Avançadas", "Capítulo 3: Estudos de Caso", "Conclusão" ]; const content = summary.map((ch) => ### ${ch}\n\nConteúdo do ${ch.toLowerCase()}...\n).join("\n"); setGenerated({ title, summary, content }); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Ebook</h2> <input type="text" placeholder="Tema do ebook" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Estilo (ex: guia, técnico, história)" value={style} onChange={(e) => setStyle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateEbook} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Ebook </button>
+
+{generated && (
+    <div className="mt-6">
+      <h3 className="text-xl font-semibold text-indigo-700 mb-2">{generated.title}</h3>
+      <p className="mb-2">Sumário:</p>
+      <ul className="list-disc list-inside mb-4">
+        {generated.summary.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+      <div className="whitespace-pre-wrap text-gray-700">{generated.content}</div>
+    </div>
+  )}
+</div>
+
+); }
+
+function GameGenerator() { const [title, setTitle] = useState(""); const [genre, setGenre] = useState(""); const [mechanics, setMechanics] = useState(""); const [result, setResult] = useState(null);
+
+const generateGame = () => { const idea = Jogo: ${title}\nGênero: ${genre}\nMecânicas: ${mechanics}\n\nResumo: Em '${title}', você explora um universo onde ${mechanics.toLowerCase()}. É um jogo de ${genre.toLowerCase()} com elementos envolventes e desafios únicos.; setResult(idea); };
+
+return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold mb-4">Criar Jogo</h2> <input type="text" placeholder="Título do jogo" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Gênero (aventura, RPG, estratégia...)" value={genre} onChange={(e) => setGenre(e.target.value)} className="w-full p-2 border rounded mb-4" /> <input type="text" placeholder="Mecânicas (ex: combates por turno, crafting, exploração...)" value={mechanics} onChange={(e) => setMechanics(e.target.value)} className="w-full p-2 border rounded mb-4" /> <button onClick={generateGame} className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"> Gerar Jogo </button>
+
+{result && (
+    <div className="mt-6 whitespace-pre-wrap text-gray-700">
+      {result}
+    </div>
+  )}
+</div>
+
+); }
+
+function Placeholder({ title }) { return ( <div className="bg-white p-6 rounded-2xl shadow-md"> <h2 className="text-2xl font-bold text-indigo-700">{title}</h2> <p className="text-gray-600 mt-2">Funcionalidade em construção...</p> </div> ); }
